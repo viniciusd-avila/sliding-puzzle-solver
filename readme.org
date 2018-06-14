@@ -1,0 +1,83 @@
+#+Title: Projetos Finais EDA - A2
+
+Data entrega das notas 28/06/2018. 
+Data entraga dos trabalhos pelos alunos: 28 (manhã).
+
+Eu poderei acompanhar os repositórios se os alunos me escreverem
+pedindo suporte.
+
+* Projeto 1: pesquisa de mútiplos padrões em textos
+
+O material deste projeto encontra-se no diretório =cpdoc=. As
+sentenças já estão 'parseadas' nos arquivos conllu que podem ser lidos
+com a biblioteca =cl-conllu= disponível via http://quicklisp.org.
+
+#+BEGIN_EXAMPLE
+CL-USER> (ql:quickload :cl-conllu)
+To load "cl-conllu":
+  Load 1 ASDF system:
+    cl-conllu
+; Loading "cl-conllu"
+.
+; "wilbur:base;" = /Users/ar/quicklisp/dists/quicklisp/software/de.setf.wilbur-20171227-git/
+...
+(:CL-CONLLU)
+CL-USER> (let ((sents (cl-conllu:read-conllu "cpdoc/data/")))
+	   (length sents))
+726
+#+END_EXAMPLE
+
+Os 'nomes' de pessoas e organizações que devem ser localizados nas
+sentenças estão nos arquivos =cpdoc/*.txt=. 
+
+A documentação sobre a biblioteca cl-conllu está no wiki do
+repositório em https://github.com/own-pt/cl-conllu.
+
+Tarefas:
+
+1. Contar quantidade de ocorrências de cada nome de pessoa e
+   organização nas sentenças. Também deve haver uma função para
+   inspecionar as contagens, isto é, dado um nome, listar todas as
+   sentenças (indicando o arquivo conllu de origem) que contém aquele
+   nome.
+
+2. Deseja-se uma solução que execute apenas uma passada linear pelas
+   sentenças. Além do apresentado em sala, parte do curso
+   https://www.coursera.org/learn/algorithms-on-strings, outras
+   abordagens descritas na [[https://en.m.wikipedia.org/wiki/String_searching_algorithm#Algorithms_using_a_finite_set_of_patterns][Wikipedia]] podem ser usadas.
+
+3. Na lista de nomes, podem haver nomes que são substrings de outros
+   nomes: Fernando Gomes Oliveira e Fernando Gomes. Neste caso, os
+   ambos devem ser contados e obviamente as substrings devem ter
+   sempre a contagem superior.
+
+4. Usando os arquivos conllu e a biblioteca cl-conllu, estaremos
+   exercitando a abordagem 'token-based', isto é, ao invés da busca
+   nas strings ser por caracteres, estaremos buscando por tokens. Uma
+   discussão sobre a diferença de abordar o problema da forma
+   char-based vs token-based é parte do trabalho. 
+
+5. Como lidar com contrações? Pode-se pre-processar as listas de
+   nomes, removendo as contrações (ex: do ~> de o) ou tratar de forma
+   mais esperta a recuperação da lista de 'tokens' das sentenças,
+   considerando o objetivo mtoken além de apenas listar os tokens de
+   cada sentença.
+
+* Projeto 2
+
+1. SAT -> 3SAT  como no livro
+
+2. SAT -> CNF
+
+3. CNF -> 3SAT
+
+4. teste sera equivalencias transformacoes
+
+5. usar problema vestidos e depois SUDOKU (vou passar codificacao vestidos quanto SUDOKU)
+
+Exemplo de uso de SAT solver para SUDOKU
+https://gist.github.com/marnitto/725b59bac12ba1f2afe1822f3b22c6d3
+
+* Projeto 3
+
+http://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/wordnet/index.html
