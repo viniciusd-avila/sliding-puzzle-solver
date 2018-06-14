@@ -31,7 +31,7 @@ To load "cl-conllu":
     cl-conllu
 ; Loading "cl-conllu"
 .
-; "wilbur:base;" = /Users/ar/quicklisp/dists/quicklisp/software/de.setf.wilbur-20171227-git/
+; "wilbur:base;" = /.../quicklisp/software/de.setf.wilbur-20171227-git/
 ...
 (:CL-CONLLU)
 CL-USER> (let ((sents (cl-conllu:read-conllu "cpdoc/data/")))
@@ -40,7 +40,10 @@ CL-USER> (let ((sents (cl-conllu:read-conllu "cpdoc/data/")))
 #+END_EXAMPLE
 
 Os 'nomes' de pessoas e organizações que devem ser localizados nas
-sentenças estão nos arquivos =cpdoc/*.txt=. 
+sentenças estão nos arquivos =cpdoc/*.txt=.  Os arquivos finais para
+análise com todas as sentenças do DHBB, depois que o algorítmo estiver
+pronto, estão no diretório =udp= do repositório
+https://github.com/cpdoc/dhbb-nlp.
 
 A documentação sobre a biblioteca cl-conllu está no wiki do
 repositório em https://github.com/own-pt/cl-conllu.
@@ -96,17 +99,14 @@ autocomplete. Possiveis alternativas:
 2. Usar Web! Desenvolver alguma interface WEB mínima que interaja com
    seu código Lisp, via javascript.
 
-* Projeto 2
+* Projeto 3: SAT fórmulas
 
 1. SAT -> 3SAT  como no livro
-
 2. SAT -> CNF
-
 3. CNF -> 3SAT
-
 4. teste sera equivalencias transformacoes
-
-5. usar problema vestidos e depois SUDOKU (vou passar codificacao vestidos quanto SUDOKU)
+5. usar problema vestidos e depois SUDOKU (vou passar codificacao
+   vestidos quanto SUDOKU)
 
 Exemplo de uso de SAT solver para SUDOKU
 https://gist.github.com/marnitto/725b59bac12ba1f2afe1822f3b22c6d3
