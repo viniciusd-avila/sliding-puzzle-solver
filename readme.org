@@ -6,6 +6,18 @@ Data entraga dos trabalhos pelos alunos: 28 (manhã).
 Eu poderei acompanhar os repositórios se os alunos me escreverem
 pedindo suporte.
 
+Qualquer implementação extra dos projetos indo além dos pedidos
+abaixo, será considerada na nota!
+
+Todos os projetos devem ser acompanhados de um relatório, feito
+preferencialmente em LaTeX, contendo:
+
+1. documentação de como usar o código e documentaçõa de cada função
+   implementada; explicação sobre como o trabalho foi feito,
+   dificuldades e como as soluções foram encontradas. 
+
+2. Uma auto-avaliação do aluno no curso.
+
 * Projeto 1: pesquisa de mútiplos padrões em textos
 
 O material deste projeto encontra-se no diretório =cpdoc=. As
@@ -63,6 +75,27 @@ Tarefas:
    considerando o objetivo mtoken além de apenas listar os tokens de
    cada sentença.
 
+* Projeto 2: projetos curso Princeton
+
+Qualquer projeto listado no curso de Princeton poderá ser considerado:
+
+http://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments.php
+
+Em especial, indico o projeto da [[http://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/wordnet/index.html][Wordnet]].
+
+O projeto [[http://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/autocomplete/index.html][autocomplete]] também pode ser feito, a parte mais delicada
+seria como usar a interface sugerida que ilustra o funcionamento do
+autocomplete. Possiveis alternativas:
+
+1. Usar o ABCL (https://common-lisp.net/project/armedbear/) que
+   permite interoperabilidade de Lisp com Java. Obviamente também
+   daria para fazer isso com Clojure
+   (https://clojure.org/guides/learn/syntax) mas ai estamos falando de
+   outra linguagem que não é CL.
+
+2. Usar Web! Desenvolver alguma interface WEB mínima que interaja com
+   seu código Lisp, via javascript.
+
 * Projeto 2
 
 1. SAT -> 3SAT  como no livro
@@ -77,7 +110,3 @@ Tarefas:
 
 Exemplo de uso de SAT solver para SUDOKU
 https://gist.github.com/marnitto/725b59bac12ba1f2afe1822f3b22c6d3
-
-* Projeto 3
-
-http://www.cs.princeton.edu/courses/archive/spring18/cos226/assignments/wordnet/index.html
