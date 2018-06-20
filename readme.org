@@ -101,12 +101,33 @@ autocomplete. Possiveis alternativas:
 
 * Projeto 3: SAT fórmulas
 
-1. SAT -> 3SAT  como no livro
-2. SAT -> CNF
-3. CNF -> 3SAT
-4. teste sera equivalencias transformacoes
-5. usar problema vestidos e depois SUDOKU (vou passar codificacao
-   vestidos quanto SUDOKU)
+O primeiro passo é a transformação de qq problema SAT, dado em
+fórmulas quaisquer, em fórmulas CNF (vide [[https://en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF][Wikipedia]]). Também encontram
+o algorítmo no livro [[https://www.amazon.com/Knowledge-Representation-Reasoning-Artificial-Intelligence/dp/1558609326/ref=sr_1_1?ie=UTF8&qid=1529481168][KRR]].
 
-Exemplo de uso de SAT solver para SUDOKU
+Uma vez a formula estando em CNF, o passo seguinte é a transformação
+proposta de SAT para 3SAT em nosso livro texto.
+
+Seria interessante implementar testes de equivalência. Ou seja, como
+checar que a formula de entrada é valida se e apenas se a formula
+final em 3SAT+CNF também for. Para casos pequenos, uma forma simples
+de testar seria verificar se ambas as fórmulas tem tabelas verdade
+iguais.
+
+Finalmente, codificar em SAT o problema dos vestidos (neste repo
+descrição) e SUDOKU em SAT e executar nestas entradas a transformação
+para 3SAT+CNF. Para o problema dos vestidos será possível resolver,
+para SUDOKU será mais complicado.
+
+Codificação do problema dos vestidos:
+
+https://github.com/arademaker/krr/blob/master/vestidos.lisp
+
+Codificação em SAT de SUDOKU:
+
+https://github.com/arademaker/krr/blob/master/sudoku.lisp
+
+Exemplo de uso de um SAT solver para resolver SUDOKU:
+
 https://gist.github.com/marnitto/725b59bac12ba1f2afe1822f3b22c6d3
+
