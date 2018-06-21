@@ -1,11 +1,15 @@
 (defclass state ()
-  ;estado atual
-  ;pai
-  ;<nbs>
-  ...)
+  ((actual :acessor state-actual
+           :initarg :actual)
+   (father :acessor state-father
+           :initarg :father)
+   (nbs    :acessor state-nbs
+           :initarg :nbs
+           :initform nil)))
 
 (defun solve (state-list n)
   ;método sem uso de classe. ALTERAR
+  ;como determinar o estado atual com a classe state?
   (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0)) ; <--
         (goal (def-goal n)))
     (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n)) ; <--
@@ -33,6 +37,7 @@
     ham))
 
 ;defining manhattam distance
+;podemos fazer em outro momento...
 (defun manhattam (actual-state goal n)
   ...)
 
