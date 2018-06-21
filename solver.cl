@@ -1,20 +1,19 @@
 (defun solve (state-list n)
-  (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0)
-        (goal (make-array (list n n)))))
+  (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0))
+        (goal (def-goal n)))
+    (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n))))
     
-    ;creating goal O(n2)
+;creating matrix-goal nxn    
+(defun def-goal (n)
+  (let ((goal (make-array (list n n))))
     (loop for i from 1 to n
           do (loop for j from 1 to n
                    do (cond ((equal (+ (1+ (* n (1- i))) (1- j)) (* n n)) 
                              (setf (aref goal (1- i) (1- j)) 0))
                             (t (setf (aref goal (1- i) (1- j)) (+ (1+ (* n (1- i))) (1- j)))))))
+    goal))
 
-    ;hamming distance
-    (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n))
-    
-    
-
-
+;defining hamming distance
 (defun hamming (actual-state goal n)
   (let ((ham 0))
     (loop for i from 1 to n
@@ -25,4 +24,4 @@
                                 (setf ham (1+ ham)))))))
     ham))
 
-;create hamming
+;create manhattam
