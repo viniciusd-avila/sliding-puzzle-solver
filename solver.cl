@@ -3,7 +3,7 @@
         (goal (def-goal n)))
     (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n))))
     
-;creating matrix-goal nxn    
+;creating goal matrix nxn    
 (defun def-goal (n)
   (let ((goal (make-array (list n n))))
     (loop for i from 1 to n
@@ -23,5 +23,12 @@
                             (if (not (equal x 0))
                                 (setf ham (1+ ham)))))))
     ham))
+
+;creating game-tree
+(defun game-tree (actual-state))
+
+;determine if we reached goal matrix
+(defun isgoal (actual-state goal)
+  (if (equal (hamming actual-state goal n) 0)))
 
 ;create manhattam
