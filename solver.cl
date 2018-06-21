@@ -23,11 +23,12 @@
                             (if (not (equal x 0))
                                 (setf ham (1+ ham)))))))
     ham))
+
 ;defining manhattam distance
 (defun manhattam (actual-state goal n))
 
-;creating game-tree
-(defun game-tree (actual-state))
+;creating neighbors
+(defun neighbors (actual-state))
 
 ;determine if we reached goal matrix
 (defun isgoal (actual-state goal)
@@ -38,3 +39,11 @@
 
 ;determine if actual-state is solvable
 (defun is-solvable (actual-state))
+
+;number of inversions in matrix
+(defun inversions (actual-state goal n))
+
+;creating priority-queue
+(defun priority-queue ...)
+
+
