@@ -26,25 +26,31 @@
     ham))
 
 ;defining manhattam distance
-(defun manhattam (actual-state goal n))
+(defun manhattam (actual-state goal n)
+  ...)
 
 ;creating neighbors
-(defun neighbors (actual-state))
+(defun neighbors (actual-state)
+  ...)
 
 ;determine if we reached goal matrix
 (defun isgoal (actual-state goal)
   (if (equalp actual-state goal)))
 
 ;defining swap 0 with a number
-(defun swap (actual-state i j))
+(defun swap (actual-state i j)
+  ...)
 
 ;determine if actual-state is solvable
-(defun is-solvable (actual-state))
+(defun is-solvable (actual-state)
+  ...)
 
 ;number of inversions in matrix
-(defun inversions (actual-state goal n))
+(defun inversions (actual-state goal n)
+  ...)
 
 ;creating priority-queue
-(defun priority-queue ...)
+(defun priority-queue ()
+  ...)
 
 
