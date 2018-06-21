@@ -8,7 +8,7 @@
   ;método sem uso de classe. ALTERAR
   (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0)) ; <--
         (goal (def-goal n)))
-    (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n))
+    (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n)) ; <--
        ...))
     
 ;creating goal matrix nxn  
@@ -44,7 +44,7 @@
 (defun isgoal (actual-state goal)
   (if (equalp actual-state goal)))
 
-;defining swap 0 with a number
+;swap 0 with all the possibilities in actual-state
 (defun swap (actual-state i j)
   ...)
 
