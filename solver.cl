@@ -24,3 +24,5 @@
                             (if (not (equal x 0))
                                 (setf ham (1+ ham)))))))
     ham))
+
+;create hamming
