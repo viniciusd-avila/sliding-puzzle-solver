@@ -23,6 +23,8 @@
                             (if (not (equal x 0))
                                 (setf ham (1+ ham)))))))
     ham))
+;defining manhattam distance
+(defun manhattam (actual-state goal n))
 
 ;creating game-tree
 (defun game-tree (actual-state))
@@ -31,4 +33,8 @@
 (defun isgoal (actual-state goal)
   (if (equalp actual-state goal)))
 
-;create manhattam
+;defining swap 0 with a number
+(defun swap (actual-state i j))
+
+;determine if actual-state is solvable
+(defun is-solvable (actual-state))
