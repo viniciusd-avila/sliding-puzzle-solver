@@ -29,6 +29,6 @@
 
 ;determine if we reached goal matrix
 (defun isgoal (actual-state goal)
-  (if (equal (hamming actual-state goal n) 0)))
+  (if (equalp actual-state goal)))
 
 ;create manhattam
