@@ -1,10 +1,18 @@
+(defclass state
+  ;estado atual
+  ;pai
+  ;<nbs>
+  ...)
+
 (defun solve (state-list n)
+  ;método sem uso de classe. ALTERAR
   (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0))
         (goal (def-goal n)))
     (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n))
        ...))
     
-;creating goal matrix nxn    
+;creating goal matrix nxn  
+;método sem uso de classe. ALTERAR
 (defun def-goal (n)
   (let ((goal (make-array (list n n))))
     (loop for i from 1 to n
