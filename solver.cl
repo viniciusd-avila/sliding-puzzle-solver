@@ -12,7 +12,6 @@
        ...))
     
 ;creating goal matrix nxn  
-;método sem uso de classe. ALTERAR
 (defun def-goal (n)
   (let ((goal (make-array (list n n))))
     (loop for i from 1 to n
