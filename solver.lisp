@@ -1,4 +1,4 @@
-(defclass state
+(defclass state ()
   ;estado atual
   ;pai
   ;<nbs>
@@ -6,7 +6,7 @@
 
 (defun solve (state-list n)
   ;método sem uso de classe. ALTERAR
-  (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0))
+  (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0)) ; <--
         (goal (def-goal n)))
     (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n))
        ...))
