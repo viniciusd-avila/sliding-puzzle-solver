@@ -83,10 +83,9 @@
                         (cond ((and (not (equal board-v goal-v)) 
                                     (not (equal board-v 0)) 
                                     (not (equal goal-v 0)))
-                               (setf inv-list (append (list (cons (min board-v goal-v)
-                                                                  (max board-v goal-v))) inv-list)))))))
+                               (push (cons (min board-v goal-v) (max board-v goal-v)) inv-list))))))
     (remove-duplicates inv-list :test #'equal)
-(length inv-list)))
+    (length inv-list)))
 
 ;creating priority-queue
 (defun priority-queue ()
