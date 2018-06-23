@@ -6,6 +6,9 @@
    (hamm   :acessor state-hamm
            :initarg :hamm
            :initform nil)
+   (zero   :acessor state-zero
+           :initarg :zero
+           :initform '())
    (nbs    :acessor state-nbs
            :initarg :nbs
            :initform nil)))
@@ -29,15 +32,13 @@
     goal))
 
 ;defining hamming distance
-(defun hamming (actual-state goal n)
-  (let ((hamm 0))
-    (loop for i from 1 to n
-          do (loop for j from 1 to n
-                   do (let ((x (aref actual-state (1- i) (1- j))))
-                        (if (not (equal x (aref goal (1- i) (1- j))))
-                            (if (not (equal x 0))
-                                (setf hamm (1+ hamm)))))))
-    hamm))
+(defun hamming (state goal n)
+  (loop for i from 1 to n
+        do (loop for j from 1 to n
+                 do (let ((x (aref (state-actual) (1- i) (1- j))))
+                         (if (not (equal x (aref goal (1- i) (1- j))))
+                             (if (not (equal x 0))
+                                 (setf (state-hamm) (1+ (state-hamm)))))))))
 
 ;defining manhattam distance
 ;podemos fazer em outro momento...
@@ -51,6 +52,15 @@
 ;determine if we reached goal matrix
 (defun isgoal (actual-state goal)
   (if (equalp actual-state goal)))
+
+;find zero in matrix
+;só precisamos fazer uma passada para o primeiro, basta alterar o state-zero quando realizarmos o swap
+;não sei se é necessario
+(defun find-zero (state n)
+  (loop for i from 1 to n
+        do (loop for j from 1 to n
+                 do (cond ((equal (aref state-actual (1- i) (1- j)) 0)
+                           (setf (state-zero) '(1- i) '(1-j)))))))
 
 ;swap 0 with all the possibilities in actual-state
 (defun swap (actual-state i j)
