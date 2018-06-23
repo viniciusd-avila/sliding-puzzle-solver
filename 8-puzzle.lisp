@@ -3,6 +3,9 @@
            :initarg :actual)
    (father :acessor state-father
            :initarg :father)
+   (hamm   :acessor state-hamm
+           :initarg :hamm
+           :initform nil)
    (nbs    :acessor state-nbs
            :initarg :nbs
            :initform nil)))
@@ -27,14 +30,14 @@
 
 ;defining hamming distance
 (defun hamming (actual-state goal n)
-  (let ((ham 0))
+  (let ((hamm 0))
     (loop for i from 1 to n
           do (loop for j from 1 to n
                    do (let ((x (aref actual-state (1- i) (1- j))))
                         (if (not (equal x (aref goal (1- i) (1- j))))
                             (if (not (equal x 0))
-                                (setf ham (1+ ham)))))))
-    ham))
+                                (setf hamm (1+ hamm)))))))
+    hamm))
 
 ;defining manhattam distance
 ;podemos fazer em outro momento...
