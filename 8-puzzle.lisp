@@ -73,7 +73,6 @@
            (...)))))
 
 ;number of inversions in matrix
-;error in result, dont know why
 (defun inversion (board goal n)
   (let ((inv-list))
     (loop for i from 1 to n
@@ -84,7 +83,7 @@
                                     (not (equal board-v 0)) 
                                     (not (equal goal-v 0)))
                                (push (cons (min board-v goal-v) (max board-v goal-v)) inv-list))))))
-    (remove-duplicates inv-list :test #'equal)
+    (setf inv-list (remove-duplicates inv-list :test #'equal))
     (length inv-list)))
 
 ;creating priority-queue
