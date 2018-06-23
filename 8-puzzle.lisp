@@ -64,6 +64,15 @@
 	(aref board (car zeropos) (cdr zeropos)) (aref board (car nbspos) (cdr nbspos))
 	(aref boad (car nbspos) (cdr nbspos)) 0))
 
+;linearizando a matriz
+(defun linear-matrix (board n)
+  (let ((board-list))
+    (loop for i from 1 to n
+          do (loop for j from 1 to n
+                   do (cond ((not (equal (aref board (1- i) (1- j)) 0))
+                             (push (aref board (1- i) (1- j)) board-list)))))
+    (reverse board-list)))
+
 ;determine if board is solvable
 ;starting this function
 (defun is-solvable (board goal n)
@@ -73,6 +82,7 @@
            (...)))))
 
 ;number of inversions in matrix
+;wrong
 (defun inversion (board goal n)
   (let ((inv-list))
     (loop for i from 1 to n
