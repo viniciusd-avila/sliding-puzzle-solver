@@ -8,7 +8,7 @@
            :initform nil)
    (zero   :acessor state-zero
            :initarg :zero
-           :initform '())
+           :initform nil)
    (nbs    :acessor state-nbs
            :initarg :nbs
            :initform nil)))
