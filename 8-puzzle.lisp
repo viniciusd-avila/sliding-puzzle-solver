@@ -1,77 +1,78 @@
-(defclass state ()
-  ((actual :acessor state-actual
-           :initarg :actual)
-   (father :acessor state-father
-           :initarg :father)
-   (hamm   :acessor state-hamm
-           :initarg :hamm
-           :initform nil)
-   (zero   :acessor state-zero
-           :initarg :zero
-           :initform nil)
-   (nbs    :acessor state-nbs
-           :initarg :nbs
-           :initform nil)))
+(defclass board ()
+	((actual	:accessor board-state
+				:initarg :state)
+	 (father	:accessor board-parent
+				:initarg :parent)
+	 (hamming	:accessor board-hamming
+				:initarg :hamming
+				:initform nil)
+	 (manhattan	:accessor board-manhattan
+				:initform nil)
+	 (zeropos	:accessor board-zeropos
+				:initform nil)))
 
 (defun solve (state-list n)
-  ;método sem uso de classe. ALTERAR
-  ;como determinar o estado atual com a classe state?
-  (let ((actual-state (list (make-array (list n n) :initial-contents state-list) 'inf 0)) ; <--
+	;método sem uso de classe. ALTERAR
+	;como determinar o estado atual com a classe state?
+	(let ((board (list (make-array (list n n) :initial-contents state-list) 'inf 0)) ; <--
         (goal (def-goal n)))
-    (setf (nth 1 actual-state) (hamming (nth 1 actual-state) goal n)) ; <--
+	(setf (nth 1 board) (hamming (nth 1 board) goal n)) ; <--
        ...))
     
-;creating goal matrix nxn  
-(defun def-goal (n)
-  (let ((goal (make-array (list n n))))
-    (loop for i from 1 to n
-          do (loop for j from 1 to n
-                   do (cond ((equal (+ (1+ (* n (1- i))) (1- j)) (* n n)) 
-                             (setf (aref goal (1- i) (1- j)) 0))
-                            (t (setf (aref goal (1- i) (1- j)) (+ (1+ (* n (1- i))) (1- j)))))))
-    goal))
+;; creating goal matrix nxn 
+(defun gen-goal (n)
+  (let ((goal-board (make-array (list n n)))
+		(counter 1))
+  (loop for line from  0 to (- n 1)
+	do (loop for column from 0 to (- n 1)
+		  do (if (equal counter (* n n)) 
+			   (setf (aref goal-board line column) 0)
+			   (setf (aref goal-board line column) counter counter (+ 1 counter)))))
+  	goal-board))
 
 ;defining hamming distance
 (defun hamming (state goal n)
-  (loop for i from 1 to n
-        do (loop for j from 1 to n
-                 do (let ((x (aref (state-actual) (1- i) (1- j))))
-                         (if (not (equal x (aref goal (1- i) (1- j))))
-                             (if (not (equal x 0))
-                                 (setf (state-hamm) (1+ (state-hamm)))))))))
+	(loop for i from 1 to n
+		do (loop for j from 1 to n
+			do (let ((x (aref (state-actual) (1- i) (1- j))))
+				 (if (not (equal x (aref goal (1- i) (1- j))))
+				   (if (not (equal x 0))
+					 (setf (state-hamm) (1+ (state-hamm)))))))))
 
 ;defining manhattam distance
 ;podemos fazer em outro momento...
-(defun manhattam (actual-state goal n)
+(defun manhattam (board goal n)
   ...)
 
 ;creating neighbors
-(defun neighbors (actual-state)
+(defun neighbors (board)
   ...)
 
 ;determine if we reached goal matrix
-(defun isgoal (actual-state goal)
-  (if (equalp actual-state goal)))
+(defun isgoal (board goal)
+  (if (equalp board goal)))
 
 ;find zero in matrix
 ;só precisamos fazer uma passada para o primeiro, basta alterar o state-zero quando realizarmos o swap
 ;não sei se é necessario
-(defun find-zero (state n)
-  (loop for i from 1 to n
-        do (loop for j from 1 to n
-                 do (cond ((equal (aref state-actual (1- i) (1- j)) 0)
-                           (setf (state-zero) '(1- i) '(1-j)))))))
+(defun find-position (board element)
+  (let ((n (array-dimension board 0)))
+	(block why
+		(loop for i from 0 to (- n 1)
+			do (loop for j from 1 to (- n 1) 
+				do (if (equal (aref board i j) element) 
+					 (return-from why (list i j))))))))
 
-;swap 0 with all the possibilities in actual-state
-(defun swap (actual-state i j)
+;swap 0 with all the possibilities in board
+(defun swap (board i j)
   ...)
 
-;determine if actual-state is solvable
-(defun is-solvable (actual-state)
+;determine if board is solvable
+(defun is-solvable (board)
   ...)
 
 ;number of inversions in matrix
-(defun inversions (actual-state goal n)
+(defun inversions (board goal n)
   ...)
 
 ;creating priority-queue
