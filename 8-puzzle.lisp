@@ -11,6 +11,14 @@
 	 (zeropos	:accessor board-zeropos
 				:initform nil)))
 
+
+(defun is-goal (board)
+  (block why 
+	(loop for i from 0 to (- (array-dimension board 0) 2)
+		  do (if (not (equal (aref board i) (+ i 1)))
+			   (return-from why nil))))
+  t)
+
 (defun solve (state-list n)
 	;método sem uso de classe. ALTERAR
 	;como determinar o estado atual com a classe state?
@@ -24,7 +32,7 @@
   (let ((n (array-dimension board 0))
 		(hamm 0))
 	(loop for i from 0 to (- n 1)
-		do (if (and (not (equal (aref board i) i)) (not (equal (aref board i) 0)))
+		do (if (and (not (equal (aref board i) (+ i 1))) (not (equal (aref board i) 0)))
 			 (setf hamm (+ hamm 1))))
 	hamm))
 
@@ -38,10 +46,10 @@
   ...)
 
 ;swap 0 with all the possibilities in board
-(defun swap-elements (board zeropos nbspos)
+(defun swap-elements (board zero-pos nbs-pos)
   (setf 
-	(aref board zeropos) (aref board nbspos)
-	(aref boad nbspos) 0))
+	(aref board zero-pos) (aref board nbs-pos)
+	(aref boad nbs-pos) 0))
 
 ;determine if board is solvable by the number of inversions in matrix
 (defun is-solvable (board)
