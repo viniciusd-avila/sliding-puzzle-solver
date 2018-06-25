@@ -17,6 +17,7 @@
 			:initarg :zeropos
 			:initform nil)))
 
+(defparameter *game-tree* (make-instance 'cl-heap:priority-queue)) 
 
 (defun is-goal (board)
   (block why 
