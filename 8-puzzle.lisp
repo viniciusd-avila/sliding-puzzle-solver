@@ -2,7 +2,7 @@
 (ql:quickload :cl-heap)
 
 (defclass board ()
-	((actual	:accessor board-state
+	((state		:accessor board-state
 			:initarg :state)
 	 (father	:accessor board-parent
 			:initarg :parent
