@@ -45,21 +45,24 @@
   ...)
 
 ;creating neighbors
+;swap 0 with all the possibilities in board
 (defun gen-neighbors (board)
   (let* ((n (sqrt (length board)))
 		(zero-pos (position 0 board)))
-	(if (> (- zero-pos n) 1) (swap-elements zero-pos (- zero-pos n)))
-	(if (< (+ zero-pos n) (- (* n n) 1)) (swap-elements zero-pos (+ zero-pos n)))
-	(if (not (zerop (mod zero-pos n))) (swap-elements zero-pos (- zero-pos 1)))
-	(if (not (zerop (mod (+ zero-pos 1) n))) (swap-elements zero-pos (+ zero-pos 1)))))
+	(if (> (- zero-pos n) 1) (make-move zero-pos (- zero-pos n)))
+	(if (< (+ zero-pos n) (- (* n n) 1)) (make-move zero-pos (+ zero-pos n)))
+	(if (not (zerop (mod zero-pos n))) (make-move zero-pos (- zero-pos 1)))
+	(if (not (zerop (mod (+ zero-pos 1) n))) (make-move zero-pos (+ zero-pos 1)))))
 
-;swap 0 with all the possibilities in board
-(defun swap-elements (board zero-pos nbs-pos)
-	;; make instance of object board
-	;; make copy issue
-  (setf 
-	(aref board zero-pos) (aref board nbs-pos)
-	(aref boad nbs-pos) 0))
+(defun make-move (board zero-pos nbs-pos)
+  (let* ((n (length board))
+         (child (make-array n)))
+    (loop for i from 0 to (- n 1)
+          do (cond 
+              ((eq i nbs-pos) (setf (aref child i) 0))
+              ((eq i zero-pos) (setf (aref child i) (aref board nbs-pos)))
+              (t (setf (aref child i) (aref board i)))))
+    child))
 
 ;determine if board is solvable by the number of inversions in matrix
 (defun is-solvable (board)
