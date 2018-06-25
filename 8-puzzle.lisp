@@ -64,7 +64,7 @@
 ;determine if board is solvable by the number of inversions in matrix
 (defun is-solvable (board)
   (let ((n (length board))
-		(inversions))
+		(inversions 0))
   (loop for i from 0 to (- n 1)
 		do (if (not (zerop (aref board i))) 
 			 (loop for j from 1 to (- n 1)
