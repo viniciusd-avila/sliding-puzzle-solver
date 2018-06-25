@@ -4,8 +4,8 @@
 (defclass board ()
 	((state		:accessor board-state
 			:initarg :state)
-	 (father	:accessor board-parent
-			:initarg :parent
+	 (father	:accessor board-father
+			:initarg :father
 			:initform nil)
 	 (hamming	:accessor board-hamming
 			:initarg :hamming
@@ -32,12 +32,24 @@
                               :hamming (hamming-dist board-list)
                               :zeropos (position 0 board-list))))
     (cl-heap:enqueue *game-tree* 'board (board-hamming board))
-    (loop while (not (equal (length *game-tree*) 0))
-          do (if (not (is-goal (board-state board)))
-                 (...)
-               (...)))))
-               
-    
+    (if (is-solvable (board-state board))
+        (let ((ans solve-aux))
+          (list ans (length ans)))
+      (print "Unsolvable"))))
+
+(defun solve-aux ()
+  (let ((obj (cl-heap:dequeue *game-tree*)))
+    (cond ((is-goal (board-state obj))
+           (unroll obj))
+          (t (gen-neighbors obj)
+             (solve-aux)))))
+
+(defun unroll (board &optional res)
+  (cond ((board-father board)
+         (push (board-state board) res)
+         (unroll (board-father board) res))
+        (t res)))
+                 
 ;defining hamming distance
 (defun hamming-dist (board)
   (let ((n (length board))
