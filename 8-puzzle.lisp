@@ -67,7 +67,7 @@
 ;swap 0 with all the possibilities in board
 (defun gen-neighbors (obj)
   (let* ((board (board-state obj))
-	 (n (sqrt (length board)))
+	 (n (truncate (sqrt (length board))))
 	 (zero-pos (position 0 board)))
 	(if (>=	(- zero-pos n) 0)
 	    (enqueue-child board zero-pos (- zero-pos n)))
