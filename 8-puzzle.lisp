@@ -32,7 +32,6 @@
          (unroll (board-father board) res))
         (t res)))
                  
-;defining hamming distance
 (defun hamming-dist (board)
   (let ((n (length board))
         (hamm 0))
@@ -53,18 +52,16 @@
     child))
 
 (defun enqueue-child (board zero-pos move)
-	(let* ((child     (make-move board zero-pos move))
-               (child-obj (make-instance 'board 
-                                         :state child 
-                                         :father board
-                                         :hamming (hamming-dist child) 
-                                         :moves (+ 1 (board-moves board))
-                                         :zeropos (position 0 child))))
-          (cl-heap:enqueue *game-tree* child-obj 
-		(+ (board-hamming child-obj) (board-moves child-obj)))))
+  (let* ((child (make-move board zero-pos move))
+         (child-obj (make-instance 'board 
+                                   :state child 
+                                   :father board
+                                   :hamming (hamming-dist child) 
+                                   :moves (+ 1 (board-moves board))
+                                   :zeropos (position 0 child))))
+    (cl-heap:enqueue *game-tree* child-obj 
+                     (+ (board-hamming child-obj) (board-moves child-obj)))))
 
-;creating neighbors
-;swap 0 with all the possibilities in board
 (defun gen-neighbors (obj)
   (let* ((board (board-state obj))
 	 (n (truncate (sqrt (length board))))
@@ -78,7 +75,6 @@
 	(if (not (zerop (mod (+ zero-pos 1) n))) 
 	    (enqueue-child board zero-pos (+ zero-pos 1)))))
 
-;determine if board is solvable by the number of inversions in matrix
 (defun is-solvable (board)
   (let ((n (length board))
 	(inversions 0))
