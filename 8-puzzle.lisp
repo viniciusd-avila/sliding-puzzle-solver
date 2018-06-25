@@ -25,13 +25,18 @@
 			   (return-from why nil)))
                        t))
 
-(defun solve (state-list n)
-	;método sem uso de classe. ALTERAR
-	;como determinar o estado atual com a classe state?
-	(let ((board (list (make-array (list n n) :initial-contents state-list) 'inf 0)) ; <--
-        (goal (def-goal n)))
-	(setf (nth 1 board) (hamming (nth 1 board) goal n)) ; <--
-       ...))
+(defun solve (board-list)
+  (let ((game-tree (make-instance 'cl-heap:priority-queue))
+        (board (make-instance 'board 
+                              :state 'board-list 
+                              :hamming (hamming-dist board-list)
+                              :zeropos (position 0 board-list))))
+    (cl-heap:enqueue game-tree 'board (board-hamming board))
+    (loop while (not (equal (length game-tree) 0))
+          do (if (not (is-goal (board-state board)))
+                 (...)
+               (...)
+               
     
 ;defining hamming distance
 (defun hamming-dist (board)
