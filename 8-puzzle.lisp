@@ -74,7 +74,3 @@
             (zerop (mod (+  inversions (- q 1)) 2)) 
           (zerop (mod (+ inversions q) 2))))
     (zerop (mod inversions 2)))))
-      
-;creating priority-queue
-(defun priority-queue ()
-...)
