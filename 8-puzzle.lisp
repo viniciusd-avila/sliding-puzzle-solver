@@ -19,8 +19,8 @@
   (block why 
 	(loop for i from 0 to (- (length board) 2)
 		  do (if (not (equal (aref board i) (+ i 1)))
-			   (return-from why nil))))
-  t)
+			   (return-from why nil)))
+                       t))
 
 (defun solve (state-list n)
 	;método sem uso de classe. ALTERAR
