@@ -61,8 +61,9 @@
 
 ;creating neighbors
 ;swap 0 with all the possibilities in board
-(defun gen-neighbors (board)
-  (let* ((n (sqrt (length board)))
+(defun gen-neighbors (obj)
+  (let* ((board (board-state obj))
+	 (n (sqrt (length board)))
 	 (zero-pos (position 0 board)))
 	(if (>=	(- zero-pos n) 0) 
 	    (enqueue-child board zero-pos (- zero-pos n)))
@@ -97,7 +98,7 @@
 ;determine if board is solvable by the number of inversions in matrix
 (defun is-solvable (board)
   (let ((n (length board))
-		(inversions 0))
+	(inversions 0))
   (loop for i from 0 to (- n 1)
 		do (if (not (zerop (aref board i))) 
 			 (loop for j from (+ i 1) to (- n 1)
