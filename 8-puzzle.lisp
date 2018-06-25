@@ -59,19 +59,15 @@
 	(if (not (zerop (mod (+ zero-pos 1) n))) (enqueue-child board zero-pos (+ zero-pos 1)))))
 
 (defun enqueue-child (board zero-pos move)
-	(let* ((child (make-move zero-pos move))
-			(child-obj 
-			(make-instance 'board 
-				:state child 
-				:father board
-				:hamming (hamming-dist child) 
-				:moves (+ 1 (board-moves board))
-				:zero-pos (position 0 child))))
-	(cl-heap:enqueue *game-tree* 
-		child-obj 
-		(+ 
-			(board-hamming child-obj) 
-			(board-moves child-obj)))))
+	(let* ((child     (make-move zero-pos move))
+               (child-obj (make-instance 'board 
+                                         :state child 
+                                         :father board
+                                         :hamming (hamming-dist child) 
+                                         :moves (+ 1 (board-moves board))
+                                         :zero-pos (position 0 child))))
+          (cl-heap:enqueue *game-tree* child-obj 
+		(+ (board-hamming child-obj) (board-moves child-obj)))))
 
 (defun make-move (board zero-pos nbs-pos)
   (let* ((n (length board))
