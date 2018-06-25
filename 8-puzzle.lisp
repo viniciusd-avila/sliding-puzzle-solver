@@ -27,16 +27,15 @@
                        t))
 
 (defun solve (board-list)
-  (let ((game-tree (make-instance 'cl-heap:priority-queue))
-        (board (make-instance 'board 
+  (let ((board (make-instance 'board 
                               :state 'board-list 
                               :hamming (hamming-dist board-list)
                               :zeropos (position 0 board-list))))
-    (cl-heap:enqueue game-tree 'board (board-hamming board))
-    (loop while (not (equal (length game-tree) 0))
+    (cl-heap:enqueue *game-tree* 'board (board-hamming board))
+    (loop while (not (equal (length *game-tree*) 0))
           do (if (not (is-goal (board-state board)))
                  (...)
-               (...)
+               (...)))))
                
     
 ;defining hamming distance
