@@ -42,7 +42,8 @@
     hamm))
 
 (defun make-move (board zero-pos nbs-pos)
-  (let* ((n (length board))
+  (let* ((parent (board-state board))
+	 (n (length parent))
          (child (make-array n)))
     (loop for i from 0 to (- n 1)
           do (cond 
@@ -63,17 +64,16 @@
                      (+ (board-hamming child-obj) (board-moves child-obj)))))
 
 (defun gen-neighbors (obj)
-  (let* ((board (board-state obj))
-	 (n (truncate (sqrt (length board))))
-	 (zero-pos (position 0 board)))
+  (let* ((n (truncate (sqrt (length board))))
+	 (zero-pos (position 0 (board-state obj)))
 	(if (>=	(- zero-pos n) 0)
-	    (enqueue-child board zero-pos (- zero-pos n)))
+	    (enqueue-child obj zero-pos (- zero-pos n)))
 	(if (< (+ zero-pos n) (* n n)) 
-	    (enqueue-child board zero-pos (+ zero-pos n)))
+	    (enqueue-child obj zero-pos (+ zero-pos n)))
 	(if (not (zerop (mod zero-pos n))) 
-	    (enqueue-child board zero-pos (- zero-pos 1)))
+	    (enqueue-child obj zero-pos (- zero-pos 1)))
 	(if (not (zerop (mod (+ zero-pos 1) n))) 
-	    (enqueue-child board zero-pos (+ zero-pos 1)))))
+	    (enqueue-child obj zero-pos (+ zero-pos 1)))))
 
 (defun is-solvable (board)
   (let ((n (length board))
