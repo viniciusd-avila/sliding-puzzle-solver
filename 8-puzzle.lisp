@@ -67,10 +67,15 @@
 		(inversions 0))
   (loop for i from 0 to (- n 1)
 		do (if (not (zerop (aref board i))) 
-			 (loop for j from 1 to (- n 1)
-				 do (if (and (not (zerop (aref board j))) (> (aref board j) (aref board i))) 
+			 (loop for j from (+ i 1) to (- n 1)
+				 do (if (and (not (zerop (aref board j))) (> (aref board j) (aref board i)))
 					  (setf inversions (+ inversions 1))))))
-  (zerop (mod inversions 2))))
+  (if (zerop (mod n 2))
+      (multiple-value-bind (q r) (floor (position 0 board) n)
+        (if (zerop r) 
+            (zerop (mod (+  inversions (- q 1)) 2)) 
+          (zerop (mod (+ inversions q) 2))))
+    (zerop (mod inversions 2)))))
       
 ;creating priority-queue
 (defun priority-queue ()
