@@ -52,10 +52,19 @@
 (defun gen-neighbors (board)
   (let* ((n (sqrt (length board)))
 		(zero-pos (position 0 board)))
-	(if (> (- zero-pos n) 1) (make-move zero-pos (- zero-pos n)))
-	(if (< (+ zero-pos n) (- (* n n) 1)) (make-move zero-pos (+ zero-pos n)))
-	(if (not (zerop (mod zero-pos n))) (make-move zero-pos (- zero-pos 1)))
-	(if (not (zerop (mod (+ zero-pos 1) n))) (make-move zero-pos (+ zero-pos 1)))))
+	(if (>=	(- zero-pos n) 0) (enqueue-child board zero-pos (- zero-pos n)))
+	(if (< (+ zero-pos n) (* n n)) (enqueue-child board zero-pos (+ zero-pos n)))
+	(if (not (zerop (mod zero-pos n))) (enqueue-child board zero-pos (- zero-pos 1)))
+	(if (not (zerop (mod (+ zero-pos 1) n))) (enqueue-child board zero-pos (+ zero-pos 1)))))
+
+(defun enqueue-child (board zero-pos move)
+	(let ((child (make-move zero-pos move)))
+		(cl-heap:enqueue (make-instance 'board 
+			:state child 
+			:father board
+			:hamming (hamming-dist child) 
+			:moves (+ 1 (board-moves board))
+			:zero-pos (position 0 child)))))
 
 (defun make-move (board zero-pos nbs-pos)
   (let* ((n (length board))
