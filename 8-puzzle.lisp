@@ -9,7 +9,7 @@
 	 (hamming	:accessor board-hamming
 				:initarg :hamming
 				:initform nil)
-	 (manhattan	:accessor board-manhattan
+	 (moves		:accessor board-moves
 				:initform nil)
 	 (zeropos	:accessor board-zeropos
 				:initform nil)))
@@ -38,11 +38,6 @@
 		do (if (and (not (equal (aref board i) (+ i 1))) (not (equal (aref board i) 0)))
 			 (setf hamm (+ hamm 1))))
 	hamm))
-
-;defining manhattam distance
-;podemos fazer em outro momento...
-(defun manhattan-dist (board)
-  ...)
 
 ;creating neighbors
 ;swap 0 with all the possibilities in board
