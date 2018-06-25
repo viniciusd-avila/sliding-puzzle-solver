@@ -2,29 +2,29 @@
 (ql:quickload :cl-heap)
 
 (defclass board ()
-	((state		:accessor board-state
-			:initarg :state)
-	 (father	:accessor board-father
-			:initarg :father
-			:initform nil)
-	 (hamming	:accessor board-hamming
-			:initarg :hamming
-			:initform nil)
-	 (moves		:accessor board-moves
-			:initarg :moves
-			:initform 0)
-	 (zeropos	:accessor board-zeropos
-			:initarg :zeropos
-			:initform nil)))
+  ((state	:accessor board-state
+		:initarg :state)
+   (father	:accessor board-father
+		:initarg :father
+		:initform nil)
+   (hamming	:accessor board-hamming
+		:initarg :hamming
+		:initform nil)
+   (moves	:accessor board-moves
+		:initarg :moves
+		:initform 0)
+   (zeropos	:accessor board-zeropos
+		:initarg :zeropos
+		:initform nil)))
 
 (defparameter *game-tree* (make-instance 'cl-heap:priority-queue)) 
 
 (defun is-goal (board)
   (block why 
-	(loop for i from 0 to (- (length board) 2)
-		  do (if (not (equal (aref board i) (+ i 1)))
-			   (return-from why nil)))
-                       t))
+    (loop for i from 0 to (- (length board) 2)
+          do (if (not (equal (aref board i) (+ i 1)))
+                 (return-from why nil)))
+    t))
 
 (defun unroll (board &optional res)
   (cond ((board-father board)
@@ -35,11 +35,12 @@
 ;defining hamming distance
 (defun hamming-dist (board)
   (let ((n (length board))
-		(hamm 0))
-	(loop for i from 0 to (- n 1)
-		do (if (and (not (equal (aref board i) (+ i 1))) (not (equal (aref board i) 0)))
-			 (setf hamm (+ hamm 1))))
-	hamm))
+        (hamm 0))
+    (loop for i from 0 to (- n 1)
+          do (if (and 
+                  (not (equal (aref board i) (+ i 1))) (not (equal (aref board i) 0)))
+                 (setf hamm (+ hamm 1))))
+    hamm))
 
 (defun make-move (board zero-pos nbs-pos)
   (let* ((n (length board))
@@ -82,10 +83,11 @@
   (let ((n (length board))
 	(inversions 0))
   (loop for i from 0 to (- n 1)
-		do (if (not (zerop (aref board i))) 
-			 (loop for j from (+ i 1) to (- n 1)
-				 do (if (and (not (zerop (aref board j))) (> (aref board j) (aref board i)))
-					  (setf inversions (+ inversions 1))))))
+	do (if (not (zerop (aref board i))) 
+               (loop for j from (+ i 1) to (- n 1)
+                     do (if (and 
+                             (not (zerop (aref board j))) (> (aref board j) (aref board i)))
+                            (setf inversions (+ inversions 1))))))
   (if (zerop (mod n 2))
       (multiple-value-bind (q r) (floor (position 0 board) n)
         (if (zerop r) 
