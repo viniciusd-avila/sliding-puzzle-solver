@@ -1,3 +1,6 @@
+;;https://common-lisp.net/project/cl-heap/
+(ql:quickload :cl-heap)
+
 (defclass board ()
 	((actual	:accessor board-state
 				:initarg :state)
