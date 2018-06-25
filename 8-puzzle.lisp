@@ -69,7 +69,7 @@
   (let* ((board (board-state obj))
 	 (n (sqrt (length board)))
 	 (zero-pos (position 0 board)))
-	(if (>=	(- zero-pos n) 0) 
+	(if (>=	(- zero-pos n) 0)
 	    (enqueue-child board zero-pos (- zero-pos n)))
 	(if (< (+ zero-pos n) (* n n)) 
 	    (enqueue-child board zero-pos (+ zero-pos n)))
@@ -104,10 +104,10 @@
 
 (defun solve (board-list)
   (let ((board (make-instance 'board 
-                              :state 'board-list 
+                              :state board-list 
                               :hamming (hamming-dist board-list)
                               :zeropos (position 0 board-list))))
-    (cl-heap:enqueue *game-tree* 'board (board-hamming board))
+    (cl-heap:enqueue *game-tree* board (board-hamming board))
     (if (is-solvable (board-state board))
         (let ((ans (solve-aux)))
           (list ans (length ans)))
