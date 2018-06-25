@@ -26,24 +26,6 @@
 			   (return-from why nil)))
                        t))
 
-(defun solve (board-list)
-  (let ((board (make-instance 'board 
-                              :state 'board-list 
-                              :hamming (hamming-dist board-list)
-                              :zeropos (position 0 board-list))))
-    (cl-heap:enqueue *game-tree* 'board (board-hamming board))
-    (if (is-solvable (board-state board))
-        (let ((ans solve-aux))
-          (list ans (length ans)))
-      (print "Unsolvable"))))
-
-(defun solve-aux ()
-  (let ((obj (cl-heap:dequeue *game-tree*)))
-    (cond ((is-goal (board-state obj))
-           (unroll obj))
-          (t (gen-neighbors obj)
-             (solve-aux)))))
-
 (defun unroll (board &optional res)
   (cond ((board-father board)
          (push (board-state board) res)
@@ -58,6 +40,27 @@
 		do (if (and (not (equal (aref board i) (+ i 1))) (not (equal (aref board i) 0)))
 			 (setf hamm (+ hamm 1))))
 	hamm))
+
+(defun make-move (board zero-pos nbs-pos)
+  (let* ((n (length board))
+         (child (make-array n)))
+    (loop for i from 0 to (- n 1)
+          do (cond 
+              ((eq i nbs-pos) (setf (aref child i) 0))
+              ((eq i zero-pos) (setf (aref child i) (aref board nbs-pos)))
+              (t (setf (aref child i) (aref board i)))))
+    child))
+
+(defun enqueue-child (board zero-pos move)
+	(let* ((child     (make-move zero-pos move))
+               (child-obj (make-instance 'board 
+                                         :state child 
+                                         :father board
+                                         :hamming (hamming-dist child) 
+                                         :moves (+ 1 (board-moves board))
+                                         :zero-pos (position 0 child))))
+          (cl-heap:enqueue *game-tree* child-obj 
+		(+ (board-hamming child-obj) (board-moves child-obj)))))
 
 ;creating neighbors
 ;swap 0 with all the possibilities in board
@@ -74,27 +77,6 @@
 	(if (not (zerop (mod (+ zero-pos 1) n))) 
 	    (enqueue-child board zero-pos (+ zero-pos 1)))))
 
-(defun enqueue-child (board zero-pos move)
-	(let* ((child     (make-move zero-pos move))
-               (child-obj (make-instance 'board 
-                                         :state child 
-                                         :father board
-                                         :hamming (hamming-dist child) 
-                                         :moves (+ 1 (board-moves board))
-                                         :zero-pos (position 0 child))))
-          (cl-heap:enqueue *game-tree* child-obj 
-		(+ (board-hamming child-obj) (board-moves child-obj)))))
-
-(defun make-move (board zero-pos nbs-pos)
-  (let* ((n (length board))
-         (child (make-array n)))
-    (loop for i from 0 to (- n 1)
-          do (cond 
-              ((eq i nbs-pos) (setf (aref child i) 0))
-              ((eq i zero-pos) (setf (aref child i) (aref board nbs-pos)))
-              (t (setf (aref child i) (aref board i)))))
-    child))
-
 ;determine if board is solvable by the number of inversions in matrix
 (defun is-solvable (board)
   (let ((n (length board))
@@ -110,3 +92,21 @@
             (zerop (mod (+  inversions (- q 1)) 2)) 
           (zerop (mod (+ inversions q) 2))))
     (zerop (mod inversions 2)))))
+
+(defun solve-aux ()
+  (let ((obj (cl-heap:dequeue *game-tree*)))
+    (cond ((is-goal (board-state obj))
+           (unroll obj))
+          (t (gen-neighbors obj)
+             (solve-aux)))))
+
+(defun solve (board-list)
+  (let ((board (make-instance 'board 
+                              :state 'board-list 
+                              :hamming (hamming-dist board-list)
+                              :zeropos (position 0 board-list))))
+    (cl-heap:enqueue *game-tree* 'board (board-hamming board))
+    (if (is-solvable (board-state board))
+        (let ((ans solve-aux))
+          (list ans (length ans)))
+      (print "Unsolvable"))))
