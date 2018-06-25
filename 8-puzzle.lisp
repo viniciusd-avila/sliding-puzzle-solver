@@ -3,16 +3,19 @@
 
 (defclass board ()
 	((actual	:accessor board-state
-				:initarg :state)
+			:initarg :state)
 	 (father	:accessor board-parent
-				:initarg :parent)
+			:initarg :parent
+			:initform nil)
 	 (hamming	:accessor board-hamming
-				:initarg :hamming
-				:initform nil)
+			:initarg :hamming
+			:initform nil)
 	 (moves		:accessor board-moves
-				:initform nil)
+			:initarg :moves
+			:initform 0)
 	 (zeropos	:accessor board-zeropos
-				:initform nil)))
+			:initarg :zeropos
+			:initform nil)))
 
 
 (defun is-goal (board)
