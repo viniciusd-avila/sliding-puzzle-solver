@@ -52,13 +52,13 @@
     child))
 
 (defun enqueue-child (board zero-pos move)
-	(let* ((child     (make-move zero-pos move))
+	(let* ((child     (make-move board zero-pos move))
                (child-obj (make-instance 'board 
                                          :state child 
                                          :father board
                                          :hamming (hamming-dist child) 
                                          :moves (+ 1 (board-moves board))
-                                         :zero-pos (position 0 child))))
+                                         :zeropos (position 0 child))))
           (cl-heap:enqueue *game-tree* child-obj 
 		(+ (board-hamming child-obj) (board-moves child-obj)))))
 
@@ -107,6 +107,6 @@
                               :zeropos (position 0 board-list))))
     (cl-heap:enqueue *game-tree* 'board (board-hamming board))
     (if (is-solvable (board-state board))
-        (let ((ans solve-aux))
+        (let ((ans (solve-aux)))
           (list ans (length ans)))
       (print "Unsolvable"))))
