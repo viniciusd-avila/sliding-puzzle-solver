@@ -99,6 +99,11 @@
           (t (gen-neighbors board-obj queue)
              (solve-aux queue)))))
 
+(defun rec-ans (res &optional (len (length res)))
+  (cond ((null res) (format t "Número de movimentos: ~D~%" len))
+        (t (print (car res))
+           (rec-ans (cdr res) len))))
+
 (defun solve (board-array)
   (let ((board-obj (make-instance 'board 
                               :state board-array
@@ -108,5 +113,5 @@
     (cl-heap:enqueue game-tree board-obj (board-hamming board-obj))
     (if (is-solvable (board-state board-obj))
         (let ((ans (solve-aux game-tree)))
-          (list ans (length ans)))
+          (rec-ans ans))
       (print "Unsolvable"))))
