@@ -10,8 +10,8 @@
    (distance	:accessor board-distance
 		:initarg :distance
 		:initform nil)
-   (moves	:accessor board-moves
-		:initarg :moves
+   (movecount	:accessor board-movecount
+		:initarg :movecount
 		:initform 0)
    (piece	:accessor board-piece
                 :initarg :piece
@@ -72,11 +72,11 @@
                                    :state child-array 
                                    :father board-obj
                                    :distance (funcall function child-array) 
-                                   :moves (+ 1 (board-moves board-obj))
+                                   :movecount (+ 1 (board-movecount board-obj))
                                    :piece (aref (board-state board-obj) move)
                                    :zeropos move)))
     (if (not (is-granparent board-obj child-obj))
-        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-moves child-obj))))))
+        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-movecount child-obj))))))
 
 (defun gen-neighbors (board-obj queue function)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
