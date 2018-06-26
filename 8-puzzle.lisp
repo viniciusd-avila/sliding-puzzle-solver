@@ -100,7 +100,7 @@
              (solve-aux queue)))))
 
 (defun rec-ans (res &optional (len (length res)))
-  (cond ((null res) (format t "Número de movimentos: ~D~%" len))
+  (cond ((null res) (format t "~%Número de movimentos: ~D" len) len)
         (t (print (car res))
            (rec-ans (cdr res) len))))
 
