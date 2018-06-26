@@ -7,8 +7,8 @@
    (father	:accessor board-father
 		:initarg :father
 		:initform nil)
-   (hamming	:accessor board-hamming
-		:initarg :hamming
+   (weight	:accessor board-weight
+		:initarg :weight
 		:initform nil)
    (moves	:accessor board-moves
 		:initarg :moves
@@ -46,7 +46,7 @@
           do (let ((val (aref board-array i)))
                (if (and (not (equal val (+ i 1))) (not (equal val 0)))
                    (setf manh (+ manh (+ (abs (- (mod i m) (mod (- val 1) m)))
-                                         (abs (- (truncate (/ i m)) (truncate (/ (- val 1) m))))))))
+                                         (abs (- (truncate (/ i m)) (truncate (/ (- val 1) m))))))))))
           manh))
 
 (defun make-move (board-obj zero-pos nbs-pos)
@@ -62,28 +62,28 @@
 (defun is-granparent (parent-obj child-obj)
   (and (board-father parent-obj) (equalp (board-state child-obj) (board-state (board-father parent-obj)))))
   
-(defun enqueue-child (queue board-obj zero-pos move)
+(defun enqueue-child (queue board-obj zero-pos move function)
   (let* ((child-array (make-move board-obj zero-pos move))
          (child-obj (make-instance 'board 
                                    :state child-array 
                                    :father board-obj
-                                   :hamming (hamming-dist child-array) 
+                                   :weight (function child-array) 
                                    :moves (+ 1 (board-moves board-obj))
                                    :zeropos (position 0 child-array))))
     (if (not (is-granparent board-obj child-obj))
-        (cl-heap:enqueue queue child-obj (+ (board-hamming child-obj) (board-moves child-obj))))))
+        (cl-heap:enqueue queue child-obj (+ (board-weight child-obj) (board-moves child-obj))))))
 
-(defun gen-neighbors (board-obj queue)
+(defun gen-neighbors (board-obj queue function)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
          (zero-pos (position 0 (board-state board-obj))))
     (if (>= (- zero-pos n) 0)
-        (enqueue-child queue board-obj zero-pos (- zero-pos n)))
+        (enqueue-child queue board-obj zero-pos (- zero-pos n) function))
     (if (< (+ zero-pos n) (* n n)) 
-        (enqueue-child queue board-obj zero-pos (+ zero-pos n)))
+        (enqueue-child queue board-obj zero-pos (+ zero-pos n) function))
     (if (not (zerop (mod zero-pos n))) 
-        (enqueue-child queue board-obj zero-pos (- zero-pos 1)))
+        (enqueue-child queue board-obj zero-pos (- zero-pos 1) function))
     (if (not (zerop (mod (+ zero-pos 1) n))) 
-        (enqueue-child queue board-obj zero-pos (+ zero-pos 1)))))
+        (enqueue-child queue board-obj zero-pos (+ zero-pos 1) function))))
 
 (defun is-solvable (board-array)
   (let ((n (length board-array))
@@ -100,26 +100,26 @@
             (zerop (mod (+ inversions q) 2))))
       (zerop (mod inversions 2)))))
 
-(defun solve-aux (queue)
+(defun solve-aux (queue function)
   (let ((board-obj (cl-heap:dequeue queue)))
     (cond ((is-goal (board-state board-obj))
            (unroll board-obj))
-          (t (gen-neighbors board-obj queue)
-             (solve-aux queue)))))
+          (t (gen-neighbors board-obj queue function)
+             (solve-aux queue function)))))
 
 (defun rec-ans (res &optional (len (length res)))
   (cond ((null res) (format t "~%Número de movimentos: ~D" len) len)
         (t (print (car res))
            (rec-ans (cdr res) len))))
 
-(defun solve (board-array)
+(defun solve (board-array function)
   (let ((board-obj (make-instance 'board 
                               :state board-array
-                              :hamming (hamming-dist board-array)
+                              :weight (function board-array)
                               :zeropos (position 0 board-array)))
         (game-tree (make-instance 'cl-heap:priority-queue)))
     (cl-heap:enqueue game-tree board-obj (board-hamming board-obj))
     (if (is-solvable (board-state board-obj))
-        (let ((ans (solve-aux game-tree)))
+        (let ((ans (solve-aux game-tree function)))
           (rec-ans ans))
       (print "Unsolvable"))))
