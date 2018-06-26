@@ -52,6 +52,9 @@
               (t (setf (aref child-array i) (aref parent-array i)))))
     child-array))
 
+(defun is-granparent (parent-obj child-obj)
+  (and (board-father parent-obj) (equalp (board-state child-obj) (board-state (board-father parent-obj)))))
+  
 (defun enqueue-child (board-obj zero-pos move)
   (let* ((child-array (make-move board-obj zero-pos move))
          (child-obj (make-instance 'board 
@@ -60,8 +63,8 @@
                                    :hamming (hamming-dist child-array) 
                                    :moves (+ 1 (board-moves board-obj))
                                    :zeropos (position 0 child-array))))
-    (cl-heap:enqueue *game-tree* child-obj 
-                     (+ (board-hamming child-obj) (board-moves child-obj)))))
+    (if (not (is-granparent board-obj child-obj))
+            (cl-heap:enqueue *game-tree* child-obj (+ (board-hamming child-obj) (board-moves child-obj))))))
 
 (defun gen-neighbors (board-obj)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
