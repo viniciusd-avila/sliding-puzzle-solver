@@ -17,8 +17,6 @@
 		:initarg :zeropos
 		:initform nil)))
 
-(defparameter *game-tree* (make-instance 'cl-heap:priority-queue)) 
-
 (defun is-goal (board-array)
   (block why 
     (loop for i from 0 to (- (length board-array) 2)
@@ -55,7 +53,7 @@
 (defun is-granparent (parent-obj child-obj)
   (and (board-father parent-obj) (equalp (board-state child-obj) (board-state (board-father parent-obj)))))
   
-(defun enqueue-child (board-obj zero-pos move)
+(defun enqueue-child (queue board-obj zero-pos move)
   (let* ((child-array (make-move board-obj zero-pos move))
          (child-obj (make-instance 'board 
                                    :state child-array 
@@ -64,19 +62,19 @@
                                    :moves (+ 1 (board-moves board-obj))
                                    :zeropos (position 0 child-array))))
     (if (not (is-granparent board-obj child-obj))
-            (cl-heap:enqueue *game-tree* child-obj (+ (board-hamming child-obj) (board-moves child-obj))))))
+            (cl-heap:enqueue queue child-obj (+ (board-hamming child-obj) (board-moves child-obj))))))
 
-(defun gen-neighbors (board-obj)
+(defun gen-neighbors (board-obj queue)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
 		(zero-pos (position 0 (board-state board-obj))))
 	(if (>=	(- zero-pos n) 0)
-	    (enqueue-child board-obj zero-pos (- zero-pos n)))
+	    (enqueue-child queue board-obj zero-pos (- zero-pos n)))
 	(if (< (+ zero-pos n) (* n n)) 
-	    (enqueue-child board-obj zero-pos (+ zero-pos n)))
+	    (enqueue-child queue board-obj zero-pos (+ zero-pos n)))
 	(if (not (zerop (mod zero-pos n))) 
-	    (enqueue-child board-obj zero-pos (- zero-pos 1)))
+	    (enqueue-child queue board-obj zero-pos (- zero-pos 1)))
 	(if (not (zerop (mod (+ zero-pos 1) n))) 
-	    (enqueue-child board-obj zero-pos (+ zero-pos 1)))))
+	    (enqueue-child queue board-obj zero-pos (+ zero-pos 1)))))
 
 (defun is-solvable (board-array)
   (let ((n (length board-array))
@@ -94,20 +92,21 @@
           (zerop (mod (+ inversions q) 2))))
     (zerop (mod inversions 2)))))
 
-(defun solve-aux ()
-  (let ((board-obj (cl-heap:dequeue *game-tree*)))
+(defun solve-aux (queue)
+  (let ((board-obj (cl-heap:dequeue queue)))
     (cond ((is-goal (board-state board-obj))
            (unroll board-obj))
-          (t (gen-neighbors board-obj)
-             (solve-aux)))))
+          (t (gen-neighbors board-obj queue)
+             (solve-aux queue)))))
 
 (defun solve (board-array)
   (let ((board-obj (make-instance 'board 
                               :state board-array
                               :hamming (hamming-dist board-array)
-                              :zeropos (position 0 board-array))))
-    (cl-heap:enqueue *game-tree* board-obj (board-hamming board-obj))
+                              :zeropos (position 0 board-array)))
+        (game-tree (make-instance 'cl-heap:priority-queue)))
+    (cl-heap:enqueue game-tree board-obj (board-hamming board-obj))
     (if (is-solvable (board-state board-obj))
-        (let ((ans (solve-aux)))
+        (let ((ans (solve-aux game-tree)))
           (list ans (length ans)))
       (print "Unsolvable"))))
