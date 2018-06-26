@@ -7,13 +7,13 @@
    (father	:accessor board-father
 		:initarg :father
 		:initform nil)
-   (weight	:accessor board-weight
-		:initarg :weight
+   (distance	:accessor board-distance
+		:initarg :distance
 		:initform nil)
    (moves	:accessor board-moves
 		:initarg :moves
 		:initform 0)
-   (piece       :accessor board-piece
+   (piece	:accessor board-piece
                 :initarg :piece
                 :initform nil) 
    (zeropos	:accessor board-zeropos
@@ -53,42 +53,42 @@
                                          (abs (- (truncate (/ i m)) (truncate (/ (- val 1) m))))))))))
           manh))
 
-(defun make-move (board-obj zero-pos nbs-pos)
+(defun make-move (board-obj move)
   (let* ((parent-array (board-state board-obj))
          (n (length parent-array))
          (child-array (make-array n)))
     (loop for i from 0 to (- n 1)
-          do (cond ((eq i nbs-pos) (setf (aref child-array i) 0))
-                   ((eq i zero-pos) (setf (aref child-array i) (aref parent-array nbs-pos)))
+          do (cond ((eq i move) (setf (aref child-array i) 0))
+                   ((eq i (board-zeropos board-obj)) (setf (aref child-array i) (aref parent-array move)))
                    (t (setf (aref child-array i) (aref parent-array i)))))
     child-array))
 
 (defun is-granparent (parent-obj child-obj)
   (and (board-father parent-obj) (equalp (board-state child-obj) (board-state (board-father parent-obj)))))
   
-(defun enqueue-child (queue board-obj zero-pos move function)
-  (let* ((child-array (make-move board-obj zero-pos move))
+(defun enqueue-child (queue board-obj move function)
+  (let* ((child-array (make-move board-obj move))
          (child-obj (make-instance 'board 
                                    :state child-array 
                                    :father board-obj
-                                   :weight (funcall function child-array) 
+                                   :distance (funcall function child-array) 
                                    :moves (+ 1 (board-moves board-obj))
                                    :piece (aref (board-state board-obj) move)
-                                   :zeropos (position 0 child-array))))
+                                   :zeropos move)))
     (if (not (is-granparent board-obj child-obj))
-        (cl-heap:enqueue queue child-obj (+ (board-weight child-obj) (board-moves child-obj))))))
+        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-moves child-obj))))))
 
 (defun gen-neighbors (board-obj queue function)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
-         (zero-pos (position 0 (board-state board-obj))))
-    (if (>= (- zero-pos n) 0)
-        (enqueue-child queue board-obj zero-pos (- zero-pos n) function))
-    (if (< (+ zero-pos n) (* n n)) 
-        (enqueue-child queue board-obj zero-pos (+ zero-pos n) function))
-    (if (not (zerop (mod zero-pos n))) 
-        (enqueue-child queue board-obj zero-pos (- zero-pos 1) function))
-    (if (not (zerop (mod (+ zero-pos 1) n))) 
-        (enqueue-child queue board-obj zero-pos (+ zero-pos 1) function))))
+		(zero (board-zeropos board-obj)))
+    (if (>= (- zero n) 0)
+        (enqueue-child queue board-obj(- zero n) function))
+    (if (< (+ zero n) (* n n)) 
+        (enqueue-child queue board-obj (+ zero n) function))
+    (if (not (zerop (mod zero n))) 
+        (enqueue-child queue board-obj (- zero 1) function))
+    (if (not (zerop (mod (+ zero 1) n))) 
+        (enqueue-child queue board-obj (+ zero 1) function))))
 
 (defun is-solvable (board-array)
   (let ((n (length board-array))
@@ -119,11 +119,11 @@
   (let* ((board-array (make-array (length board-list) :initial-contents board-list))
          (board-obj (make-instance 'board 
                                    :state board-array
-                                   :weight (funcall function board-array)
+                                   :distance (funcall function board-array)
                                    :zeropos (position 0 board-array)))
          (game-tree (make-instance 'cl-heap:priority-queue)))
-    (cl-heap:enqueue game-tree board-obj (board-weight board-obj))
+    (cl-heap:enqueue game-tree board-obj (board-distance board-obj))
     (if (is-solvable (board-state board-obj))
         (let ((ans (solve-aux game-tree function)))
           (rec-ans ans))
-      (print "Unsolvable"))))
+(print "Unsolvable"))))
