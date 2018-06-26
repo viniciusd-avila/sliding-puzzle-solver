@@ -13,6 +13,9 @@
    (moves	:accessor board-moves
 		:initarg :moves
 		:initform 0)
+   (piece       :accessor board-piece
+                :initarg :piece
+                :initform nil) 
    (zeropos	:accessor board-zeropos
 		:initarg :zeropos
 		:initform nil)))
@@ -24,11 +27,12 @@
                  (return-from why nil)))
     t))
 
-(defun unroll (board-obj &optional res)
+(defun unroll (board-obj &optional mov res)
   (cond ((board-father board-obj)
+         (push (board-piece board-obj) mov)
          (push (board-state board-obj) res)
-         (unroll (board-father board-obj) res))
-        (t res)))
+         (unroll (board-father board-obj) mov res))
+        (t (list res mov))))
                  
 (defun hamming-dist (board-array)
   (let ((n (length board-array))
@@ -69,6 +73,7 @@
                                    :father board-obj
                                    :weight (funcall function child-array) 
                                    :moves (+ 1 (board-moves board-obj))
+                                   :piece (aref (board-state board-obj) move)
                                    :zeropos (position 0 child-array))))
     (if (not (is-granparent board-obj child-obj))
         (cl-heap:enqueue queue child-obj (+ (board-weight child-obj) (board-moves child-obj))))))
@@ -105,10 +110,10 @@
           (t (gen-neighbors board-obj queue function)
              (solve-aux queue function)))))
 
-(defun rec-ans (res &optional (len (length res)))
-  (cond ((null res) (format t "~%Número de movimentos: ~D" len) len)
-        (t (print (car res))
-           (rec-ans (cdr res) len))))
+(defun rec-ans (ans &optional (len (length (car ans))))
+  (cond ((null (car ans)) (format t "~%~%Número de movimentos: ~%~D~%~%Peças a serem movidas:~%" len) (cadr ans))
+        (t (print (caar ans))
+           (rec-ans (cons (cdr (car ans)) (cdr ans)) len))))
 
 (defun solve (board-list function)
   (let* ((board-array (make-array (length board-list) :initial-contents board-list))
