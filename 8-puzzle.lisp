@@ -111,7 +111,7 @@
              (solve-aux queue function)))))
 
 (defun rec-ans (ans &optional (len (length (car ans))))
-  (cond ((null (car ans)) (format t "~%~%Número de movimentos: ~%~D~%~%Peças a serem movidas:~%" len) (cadr ans))
+  (cond ((null (car ans)) (format t "~%~%Número de movimentos: ~%~D~%~%Ordem de peças a serem movidas:~%" len) (cadr ans))
         (t (print (caar ans))
            (rec-ans (cons (cdr (car ans)) (cdr ans)) len))))
 
