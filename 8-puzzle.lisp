@@ -67,7 +67,7 @@
          (child-obj (make-instance 'board 
                                    :state child-array 
                                    :father board-obj
-                                   :weight (function child-array) 
+                                   :weight (funcall function child-array) 
                                    :moves (+ 1 (board-moves board-obj))
                                    :zeropos (position 0 child-array))))
     (if (not (is-granparent board-obj child-obj))
@@ -94,10 +94,8 @@
                        do (if (and (not (zerop (aref board-array j))) (> (aref board-array j) (aref board-array i)))
                               (setf inversions (+ inversions 1))))))
     (if (zerop (mod n 2))
-        (multiple-value-bind (q r) (floor (position 0 board-array) n)
-          (if (zerop r) 
-              (zerop (mod (+  inversions (- q 1)) 2)) 
-            (zerop (mod (+ inversions q) 2))))
+        (let ((q (floor (position 0 board-array) (truncate (sqrt n)))))
+          (not (zerop (mod (+ inversions q) 2))))
       (zerop (mod inversions 2)))))
 
 (defun solve-aux (queue function)
@@ -115,10 +113,10 @@
 (defun solve (board-array function)
   (let ((board-obj (make-instance 'board 
                               :state board-array
-                              :weight (function board-array)
+                              :weight (funcall function board-array)
                               :zeropos (position 0 board-array)))
         (game-tree (make-instance 'cl-heap:priority-queue)))
-    (cl-heap:enqueue game-tree board-obj (board-hamming board-obj))
+    (cl-heap:enqueue game-tree board-obj (board-weight board-obj))
     (if (is-solvable (board-state board-obj))
         (let ((ans (solve-aux game-tree function)))
           (rec-ans ans))
