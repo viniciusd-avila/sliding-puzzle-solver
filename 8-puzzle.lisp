@@ -39,6 +39,19 @@
                  (setf hamm (+ hamm 1))))
     hamm))
 
+(defun manhattan-dist (board-array)
+  (let ((n (length board-array))
+        (m (truncate (sqrt n)))
+        (manh 0))
+    (loop for i from 0 to (- n 1)
+          do (if (and 
+                  (not (equal (aref board-array i) (+ i 1))) (not (equal (aref board-array i) 0)))
+                 (setf manh (+ manh (+ 
+                                     (abs (- (mod i m)) (mod (aref board-array i) m)) ;distancia horizontal
+                               (truncate (/ (- (aref i board-array) i) m)) ;distancia vertical
+                               )))))
+    manh))
+
 (defun make-move (board-obj zero-pos nbs-pos)
   (let* ((parent-array (board-state board-obj))
 		(n (length parent-array))
