@@ -95,7 +95,7 @@
                               (setf inversions (+ inversions 1))))))
     (if (zerop (mod n 2))
         (let ((q (floor (position 0 board-array) (truncate (sqrt n)))))
-          (not (zerop (mod (+ inversions q) 2))))
+          (zerop (mod (+ inversions q) 2)))
       (zerop (mod inversions 2)))))
 
 (defun solve-aux (queue function)
