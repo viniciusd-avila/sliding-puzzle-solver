@@ -110,12 +110,13 @@
         (t (print (car res))
            (rec-ans (cdr res) len))))
 
-(defun solve (board-array function)
-  (let ((board-obj (make-instance 'board 
-                              :state board-array
-                              :weight (funcall function board-array)
-                              :zeropos (position 0 board-array)))
-        (game-tree (make-instance 'cl-heap:priority-queue)))
+(defun solve (board-list function)
+  (let* ((board-array (make-array (length board-list) :initial-contents board-list))
+         (board-obj (make-instance 'board 
+                                   :state board-array
+                                   :weight (funcall function board-array)
+                                   :zeropos (position 0 board-array)))
+         (game-tree (make-instance 'cl-heap:priority-queue)))
     (cl-heap:enqueue game-tree board-obj (board-weight board-obj))
     (if (is-solvable (board-state board-obj))
         (let ((ans (solve-aux game-tree function)))
