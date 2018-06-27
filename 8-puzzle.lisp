@@ -78,7 +78,7 @@
     (if (not (is-granparent board-obj child-obj))
         (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-movecount child-obj))))))
 
-(defun gen-neighbors (board-obj queue function)
+(defun gen-children (board-obj queue function)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
 		(zero (board-zeropos board-obj)))
     (if (>= (- zero n) 0)
@@ -107,7 +107,7 @@
   (let ((board-obj (cl-heap:dequeue queue)))
     (cond ((is-goal (board-state board-obj))
            (unroll board-obj))
-          (t (gen-neighbors board-obj queue function)
+          (t (gen-children board-obj queue function)
              (solve-aux queue function)))))
 
 (defun rec-ans (ans &optional (len (length (car ans))))
