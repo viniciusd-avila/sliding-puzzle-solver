@@ -63,20 +63,21 @@
                    (t (setf (aref child-array i) (aref parent-array i)))))
     child-array))
 
-(defun is-granparent (parent-obj child-obj)
-  (and (board-father parent-obj) (equalp (board-state child-obj) (board-state (board-father parent-obj)))))
+(defun is-granparent (parent-obj child-array)
+  (and (board-father parent-obj) (equalp child-array (board-state (board-father parent-obj)))))
   
 (defun enqueue-child (queue board-obj move function)
-  (let* ((child-array (make-move board-obj move))
-         (child-obj (make-instance 'board 
+  (let* ((child-array (make-move board-obj move)))
+	(if (not (is-granparent board-obj child-array))
+		(let
+         ((child-obj (make-instance 'board 
                                    :state child-array 
                                    :father board-obj
                                    :distance (funcall function child-array) 
-                                   :movecount (+ 1 (board-movecount board-obj))
+                                   :moves (+ 1 (board-moves board-obj))
                                    :piece (aref (board-state board-obj) move)
                                    :zeropos move)))
-    (if (not (is-granparent board-obj child-obj))
-        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-movecount child-obj))))))
+        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-moves child-obj)))))))
 
 (defun gen-children (board-obj queue function)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
