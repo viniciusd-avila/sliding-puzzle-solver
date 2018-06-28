@@ -74,10 +74,10 @@
                                    :state child-array 
                                    :father board-obj
                                    :distance (funcall function child-array) 
-                                   :moves (+ 1 (board-moves board-obj))
+                                   :movecount (+ 1 (board-movecount board-obj))
                                    :piece (aref (board-state board-obj) move)
                                    :zeropos move)))
-        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-moves child-obj)))))))
+        (cl-heap:enqueue queue child-obj (+ (board-distance child-obj) (board-movecount child-obj)))))))
 
 (defun gen-children (board-obj queue function)
   (let* ((n (truncate (sqrt (length (board-state board-obj)))))
