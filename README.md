@@ -6,7 +6,7 @@ Common Lisp implementation of the [A\* search algorithm](https://en.wikipedia.or
 
 Call `(solve '(0 1 3 4 2 5 7 8 6) #'manhattan-dist)` to get a list of moves to solve the puzzle. Manhattan-dist is a heuristic function, you can alternatevely use the less eficient *hamming-dist* passing it as the 2nd argument of the *solve* function.  
 
-## Relatório para a disciplina Estrutura de Dados e Algoritmos (2017/01)
+## Relatório para a disciplina Estrutura de Dados e Algoritmos (2018/01)
 
 O projeto foi realizado em dupla, com o aluno Matheus Assis, solucionando o _Sliding Puzzle_. Dado um tabuleiro n x n com (n² – 1) peças numeradas de 1 a (n² – 1) em ordem qualquer, e sejam movimentos legítimos apenas aqueles que “arrastam” uma peça vizinha para a casa vazia do tabuleiro, retornamos todos os movimentos necessários para que essas peças sejam dispostas em ordem numérica. 
 
