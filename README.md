@@ -37,6 +37,7 @@ Uma vez que tenha-se baixado e compilado a biblioteca CL-HEAP, preferencialmente
 Também é necessário escolher entre _hamming-dist_ ou _manhattan-dist_. Feito isso, basta salvar, compilar e carregar o arquivo sliding-puzzle.lisp, e chamar a função solve da forma: 
 
 CL-USER 10 : 1 > (solve '(0 1 3 4 2 5 7 8 6) #'manhattan-dist) 
+
 #(1 0 3 4 2 5 7 8 6)  
 #(1 2 3 4 0 5 7 8 6)  
 #(1 2 3 4 5 0 7 8 6)  
